@@ -1,2 +1,2 @@
-# GarminConnectMenu
-UserScript for TamperMonkey. Removing reorganizing activities and removing Golf menu item
+# Garmin Connect Menu
+UserScript for TamperMonkey. Reorganizing activities and removing Golf menu item
