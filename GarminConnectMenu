@@ -1,0 +1,48 @@
+// ==UserScript==
+// @name         Garmin Connect Navigation Customizer
+// @namespace    http://tampermonkey.net/
+// @version      1.0
+// @description  Customize Garmin Connect navigation by replacing or removing specific selectors
+// @author       Your Name
+// @match        *://connect.garmin.com/*
+// @grant        none
+// ==/UserScript==
+
+(function() {
+    'use strict';
+
+    // Helper function to reMOVE elements by XPath
+    function removeElementByXPath(xpath) {
+        const element = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+        if (element) {
+            element.remove();
+        }
+    }
+
+    // Helper function to rePLACE navigation link by XPath
+    function replaceNavLink(xpath, newHref, newText) {
+        const navLink = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+        if (navLink) {
+            navLink.href = newHref;
+            navLink.textContent = newText;
+        }
+    }
+
+    function replaceMenuItemBy(id, newMenuItemText, newMenuItemUrlPart){
+        const menuItemXPath = '/html/body/div[1]/nav/div/ul[2]/li[1]/ul/li[' + id + ']/a';
+        const runningText = newMenuItemText;
+        const runningHref = '/modern/activities?activityType=' + newMenuItemUrlPart;
+        replaceNavLink(menuItemXPath, runningHref, runningText);
+    }
+
+    replaceMenuItemBy(1, 'Running', 'running')
+    replaceMenuItemBy(2, 'Cycling', 'cycling')
+
+    // Remove unwanted selectors
+    const golfXPath = '/html/body/div[1]/nav/div/ul[2]/li[1]/ul/li[3]';
+    const otherSelectorXPath = '/html/body/div[1]/nav/div/ul[2]/li[1]/ul/li[4]';
+    removeElementByXPath(golfXPath);
+    removeElementByXPath(otherSelectorXPath);
+
+    console.log('Garmin Connect navigation customized successfully.');
+})();
